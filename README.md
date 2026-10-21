@@ -21,7 +21,7 @@ Dieses Projekt automatisiert den Ablauf von der CSV-Datei bis zum fertigen Beric
 
 - [x] Kontoauszug einlesen und bereinigen
 - [x] Monatsübersicht (Einnahmen, Ausgaben, Saldo)
-- [ ] Automatische Kategorisierung
+- [x] Automatische Kategorisierung
 - [ ] Erkennung von Auffälligkeiten
 - [ ] Diagramme
 - [ ] Export als Excel-Bericht

@@ -14,6 +14,8 @@ from pathlib import Path
 
 import pandas as pd
 
+from kategorien import kategorisieren #NEU
+
 # Pfad zur Datei – relativ zum Projektordner, damit es auf jedem Rechner funktioniert
 DATEI = Path(__file__).parent.parent / "data" / "kontoauszug_beispiel.csv"
 
@@ -52,6 +54,7 @@ def monatsuebersicht(df: pd.DataFrame) -> pd.DataFrame:
 
 def main() -> None:
     df = kontoauszug_laden(DATEI)
+    df["kategorie"] = df["text"].apply(kategorisieren)  
 
     print(f"{len(df)} Buchungen eingelesen "
           f"({df['datum'].min():%d.%m.%Y} bis {df['datum'].max():%d.%m.%Y})\n")
@@ -62,6 +65,9 @@ def main() -> None:
     print("\n=== Die 5 größten Ausgaben ===")
     top = df.nsmallest(5, "betrag")[["datum", "text", "betrag"]]
     print(top.to_string(index=False))
+
+    print("\n=== Ausgaben nach Kategorie ===")  
+    print(df.groupby("kategorie")["betrag"].sum().round(2).sort_values().to_string())  
 
 
 if __name__ == "__main__":
