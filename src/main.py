@@ -1,10 +1,11 @@
 """
-Finance Automation – Tag 1: Kontoauszug einlesen und erste Übersicht
+Finance Automation – Kontoauszug einlesen und auswerten
 
-Was dieses Skript macht:
+Funktionsumfang:
 1. Liest einen Kontoauszug im deutschen CSV-Format ein (Semikolon, Komma als Dezimaltrennzeichen)
 2. Wandelt Datum und Beträge in echte Datentypen um
-3. Gibt eine erste Übersicht aus: Einnahmen, Ausgaben, Saldo pro Monat
+3. Ordnet jede Buchung automatisch einer Kategorie zu
+4. Gibt Auswertungen aus: Monatsübersicht, größte Ausgaben, Ausgaben nach Kategorie und nach Kategorie und Monat
 
 Ausführen (im Projektordner):
     python src/main.py
@@ -14,7 +15,7 @@ from pathlib import Path
 
 import pandas as pd
 
-from kategorien import kategorisieren #NEU
+from kategorien import kategorisieren
 
 # Pfad zur Datei – relativ zum Projektordner, damit es auf jedem Rechner funktioniert
 DATEI = Path(__file__).parent.parent / "data" / "kontoauszug_beispiel.csv"
@@ -52,9 +53,24 @@ def monatsuebersicht(df: pd.DataFrame) -> pd.DataFrame:
     return uebersicht.round(2)
 
 
+def kategorien_pro_monat(df: pd.DataFrame) -> pd.DataFrame:
+    """Summiert die Beträge pro Kategorie und Monat."""
+    df = df.copy()
+    df["monat"] = df["datum"].dt.to_period("M")
+    tabelle = pd.pivot_table(
+        df,
+        index="kategorie",
+        columns="monat",
+        values="betrag",
+        aggfunc="sum",
+        fill_value=0,
+    )
+    return tabelle.round(2)
+
+
 def main() -> None:
     df = kontoauszug_laden(DATEI)
-    df["kategorie"] = df["text"].apply(kategorisieren)  
+    df["kategorie"] = df["text"].apply(kategorisieren)
 
     print(f"{len(df)} Buchungen eingelesen "
           f"({df['datum'].min():%d.%m.%Y} bis {df['datum'].max():%d.%m.%Y})\n")
@@ -66,8 +82,11 @@ def main() -> None:
     top = df.nsmallest(5, "betrag")[["datum", "text", "betrag"]]
     print(top.to_string(index=False))
 
-    print("\n=== Ausgaben nach Kategorie ===")  
-    print(df.groupby("kategorie")["betrag"].sum().round(2).sort_values().to_string())  
+    print("\n=== Ausgaben nach Kategorie ===")
+    print(df.groupby("kategorie")["betrag"].sum().round(2).sort_values().to_string())
+
+    print("\n=== Ausgaben nach Kategorie und Monat ===")
+    print(kategorien_pro_monat(df).to_string())
 
 
 if __name__ == "__main__":

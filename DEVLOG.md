@@ -45,3 +45,28 @@ Beim ersten Ausführen erschien `ModuleNotFoundError: No module named 'pandas'`.
 **Nächster Schritt:**
 Ausgaben pro Kategorie und Monat in einer Pivot-Tabelle auswerten, um monatliche Abweichungen zu erkennen.
 
+## Tag 3 – 22.10.2026
+**Erledigt:**
+Pivot-Tabelle erstellt (neue Funktion `kategorien_pro_monat`), Ausgaben werden jetzt pro Kategorie und Monat dargestellt -> Entwicklung der Ausgaben über die Zeit sichtbar
+
+Code aufgeräumt: Beschreibung am Anfang von `main.py` aktualisiert.
+
+**Gelernt:**
+Aufbau einer Pivot-Tabelle mit pandas: `index` bestimmt die Zeilen, `columns` die Spalten, `values` die berechneten Werte (vergleichbar mit Zeilen, Spalten und Werten in einer Excel-Pivot-Tabelle); Vertauschen von `index` und `columns` dreht die Tabelle nur (transponiert), die Werte bleiben gleich.
+
+Unterschied zwischen Funktion definieren (`def`) und Funktion aufrufen; Reihenfolge im Code beachten (die Spalte „kategorie“ muss existieren, bevor die Pivot-Tabelle erstellt wird); Unterschied zwischen Funktion und Methode.
+
+**Problem & Lösung:**
+-Problem: Unter der neuen Überschrift wurde statt der Pivot-Tabelle die Monatsübersicht ausgegeben
+-Lösung: Ursache war der Aufruf der alten Funktion `monatsuebersicht`, Aufruf auf `kategorien_pro_monat(df)` angepasst.
+
+
+-> Die Auswertung nach Monat zeigt Abweichungen, die in der Gesamtsumme untergehen: Das Minus im August (−664,38 €) entsteht fast vollständig durch einen einzelnen Amazon-Einkauf über 649 € (Online Shopping −718,18 € statt sonst −185,91 € bzw. −21,64 €).
+
+-> Auffälligkeit bei den Fixkosten: „Abos & Verträge“ liegt im September bei −60,96 € statt −49,97 €. Ursache ist eine doppelte Spotify-Abbuchung über 10,99 €.
+
+
+**Nächster Schritt:**
+Doppelbuchungen automatisch erkennen, damit Fehler wie die doppelte Spotify-Abbuchung nicht mehr manuell gesucht werden müssen.
+
+
