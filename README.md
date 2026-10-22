@@ -2,7 +2,7 @@
 
 Automatisierte Auswertung von Kontoauszügen mit Python: Buchungen einlesen, automatisch kategorisieren, Auffälligkeiten erkennen und einen Monatsbericht erzeugen.
 
->**Status:** in Entwicklung – Fortschritt wird täglich im [Entwicklungstagebuch](DEVLOG.md) dokumentiert.
+>**Status:** in Entwicklung – Fortschritt wird regelmäßig im [Entwicklungstagebuch](DEVLOG.md) dokumentiert.
 
 ## Problem
 
@@ -35,7 +35,7 @@ Python · pandas · (geplant: matplotlib, openpyxl, BPMN)
 ## Installation & Nutzung
 
 ```bash
-git clone https://github.com/<Awni4>/finance-automation.git
+git clone https://github.com/Awni4/finance-automation.git
 cd finance-automation
 pip install -r requirements.txt
 python src/main.py
@@ -48,3 +48,5 @@ Alle Daten im Ordner `data/` sind **frei erfunden**. Es werden keine echten Bank
 ## Autor
 
 Awni Badlah – Student der Wirtschaftsinformatik, Schwerpunkt KI, Finanzen und Prozessautomatisierung
+
+Entwickelt mit KI-Unterstützung (Claude) als Lern- und Portfolioprojekt.
