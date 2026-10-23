@@ -59,4 +59,25 @@ Unterschied zwischen Funktion definieren (`def`) und Funktion aufrufen; Reihenfo
 **Nächster Schritt:**
 Doppelbuchungen automatisch erkennen, damit Fehler wie die doppelte Spotify-Abbuchung nicht mehr manuell gesucht werden müssen.
 
+## Tag 4 – 24.10.2026
+**Erledigt:**
+Code nach dem DRY-Prinzip überarbeitet: Die Spalte `monat` wird jetzt einmalig in `kontoauszug_laden` erzeugt statt doppelt in `monatsuebersicht` und `kategorien_pro_monat` -> eine zentrale Stelle für Änderungen, Ausgabe unverändert
 
+Neue Funktion `doppelbuchungen_finden`: Buchungen mit gleichem Text, Betrag und Monat werden als Verdacht auf Doppelbuchung ausgegeben -> doppelte Spotify-Abbuchung im September wird automatisch erkannt
+
+**Gelernt:**
+DRY-Prinzip (Don't Repeat Yourself); Refactoring: Code verbessern, ohne das Ergebnis zu verändern (Kontrolle über identische Ausgabe vorher/nachher); Funktionen erhalten dasselbe DataFrame und keine Kopie, Änderungen darin wirken sich auf das Original aus (Seiteneffekte).
+
+`duplicated` mit `subset` und `keep=False` (alle betroffenen Buchungen markieren, nicht nur die zweite); Filtern eines DataFrames über True/False-Werte; Auswahl mehrerer Spalten mit `[[...]]`.
+
+**Problem & Lösung:**
+- Problem: Erste Version lieferte 38 statt 2 Treffer, darunter viele normale Einkäufe mit unterschiedlichen Beträgen
+- Lösung: Ursache anhand der Ausgabe erkannt (unterschiedliche Beträge wurden als doppelt markiert, einmalige Monatsbuchungen wie die Miete fehlten) -> `betrag` fehlte im Vergleich, `subset` auf `["text", "betrag", "monat"]` korrigiert.
+
+
+-> Designentscheidung: Auswertungsfunktionen arbeiten ohne `df.copy()`, da sie die Daten nur lesen und nicht verändern. Eine Kopie würde bei großen Datenmengen (z. B. Millionen Buchungen in einem Unternehmen) unnötig Speicher und Rechenzeit verbrauchen. Kopiert wird nur, wenn eine Funktion Daten tatsächlich verändert.
+
+-> Ein Treffer ist nur ein Verdacht und kein sicherer Fehler: Zwei gleiche Bahntickets im selben Monat wären z. B. legitim. Das Programm markiert, ein Mensch prüft.
+
+**Nächster Schritt:**
+Ungewöhnlich hohe Ausgaben automatisch erkennen, damit Ausreißer wie der Amazon-Einkauf über 649 € im August nicht mehr manuell gesucht werden müssen.

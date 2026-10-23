@@ -23,7 +23,8 @@ Dieses Projekt automatisiert den Ablauf von der CSV-Datei bis zum fertigen Beric
 - [x] Monatsübersicht (Einnahmen, Ausgaben, Saldo)
 - [x] Automatische Kategorisierung
 - [x] Auswertung nach Kategorie und Monat (Pivot-Tabelle)
-- [ ] Erkennung von Auffälligkeiten
+- [x] Erkennung von Doppelbuchungen
+- [ ] Erkennung ungewöhnlich hoher Ausgaben
 - [ ] Diagramme
 - [ ] Export als Excel-Bericht
 - [ ] Prozessmodell (BPMN) Vorher/Nachher

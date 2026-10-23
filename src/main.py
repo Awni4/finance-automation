@@ -6,6 +6,7 @@ Funktionsumfang:
 2. Wandelt Datum und Beträge in echte Datentypen um
 3. Ordnet jede Buchung automatisch einer Kategorie zu
 4. Gibt Auswertungen aus: Monatsübersicht, größte Ausgaben, Ausgaben nach Kategorie und nach Kategorie und Monat
+5. Erkennt Verdachtsfälle auf Doppelbuchungen (gleicher Text, Betrag und Monat)
 
 Ausführen (im Projektordner):
     python src/main.py
@@ -37,13 +38,13 @@ def kontoauszug_laden(pfad: Path) -> pd.DataFrame:
     })
     # Text "01.07.2026" in ein echtes Datum umwandeln
     df["datum"] = pd.to_datetime(df["datum"], format="%d.%m.%Y")
+     # Monat als eigene Spalte, wird von mehreren Auswertungen genutzt
+    df["monat"] = df["datum"].dt.to_period("M")
     return df
 
 
 def monatsuebersicht(df: pd.DataFrame) -> pd.DataFrame:
     """Berechnet Einnahmen, Ausgaben und Saldo pro Monat."""
-    df = df.copy()
-    df["monat"] = df["datum"].dt.to_period("M")
     uebersicht = df.groupby("monat").agg(
         einnahmen=("betrag", lambda b: b[b > 0].sum()),
         ausgaben=("betrag", lambda b: b[b < 0].sum()),
@@ -55,8 +56,6 @@ def monatsuebersicht(df: pd.DataFrame) -> pd.DataFrame:
 
 def kategorien_pro_monat(df: pd.DataFrame) -> pd.DataFrame:
     """Summiert die Beträge pro Kategorie und Monat."""
-    df = df.copy()
-    df["monat"] = df["datum"].dt.to_period("M")
     tabelle = pd.pivot_table(
         df,
         index="kategorie",
@@ -66,6 +65,12 @@ def kategorien_pro_monat(df: pd.DataFrame) -> pd.DataFrame:
         fill_value=0,
     )
     return tabelle.round(2)
+
+
+def doppelbuchungen_finden(df: pd.DataFrame) -> pd.DataFrame:
+    """Findet Buchungen, die im selben Monat mit gleichem Text und Betrag mehrfach vorkommen."""
+    doppelt = df.duplicated(subset=["text", "monat", "betrag"], keep=False)
+    return df[doppelt]
 
 
 def main() -> None:
@@ -87,6 +92,10 @@ def main() -> None:
 
     print("\n=== Ausgaben nach Kategorie und Monat ===")
     print(kategorien_pro_monat(df).to_string())
+
+    print("\n=== Verdacht auf Doppelbuchungen ===")
+    doppelte = doppelbuchungen_finden(df)[["datum", "text", "betrag"]]
+    print(doppelte.to_string(index=False))
 
 
 if __name__ == "__main__":
