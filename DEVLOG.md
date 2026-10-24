@@ -81,3 +81,27 @@ DRY-Prinzip (Don't Repeat Yourself); Refactoring: Code verbessern, ohne das Erge
 
 **Nächster Schritt:**
 Ungewöhnlich hohe Ausgaben automatisch erkennen, damit Ausreißer wie der Amazon-Einkauf über 649 € im August nicht mehr manuell gesucht werden müssen.
+
+## Tag 5 – 25.10.2026
+**Erledigt:**
+Neue Funktion `ausreisser_finden`: Ausgaben werden als ungewöhnlich hoch markiert, wenn sie mehr als das Dreifache des Medians ihrer Kategorie betragen -> Amazon-Einkauf über 649 € im August wird automatisch erkannt, ohne Fehlalarme
+
+Grenzwert relativ zur Kategorie statt fester Betrag: Ein fester Grenzwert (z. B. 200 €) würde die Miete jeden Monat markieren und ungewöhnliche Beträge in günstigen Kategorien (z. B. Lebensmittel) übersehen.
+
+**Gelernt:**
+Median vs. Mittelwert: Der Median ist robust gegenüber Ausreißern, der Mittelwert nicht (Online Shopping: Mittelwert −154,29 €, Median −66,47 €); `transform` liefert im Gegensatz zu `agg` für jede Buchung den Wert ihrer Gruppe und ermöglicht so den Vergleich Zeile für Zeile.
+
+Zeilen filtern nach dem Muster `tabelle[bedingung]`; Standardwerte für Parameter (`faktor = 3`), damit der Grenzwert sichtbar und anpassbar ist statt als feste Zahl im Code; Vergleiche bei negativen Beträgen: höhere Ausgabe = kleinerer Wert.
+
+**Problem & Lösung:**
+- Problem: Erster Ansatz mit Mittelwert und Standardabweichung war instabil, da der Ausreißer beide Werte selbst stark verzerrt (bei 2,5 Standardabweichungen wurde der Amazon-Einkauf nicht mehr erkannt)
+- Lösung: Umstieg auf den Median der jeweiligen Kategorie als Referenzwert.
+
+
+-> Wahl des Faktors getestet: Faktor 2 markiert zusätzlich zwei normale Wocheneinkäufe bei REWE (ca. 69 €) als auffällig, Faktor 3 findet nur den tatsächlichen Ausreißer.
+
+-> Mögliche Erweiterung: Wesentlichkeitsgrenze relativ zum Einkommen, damit nur Beträge markiert werden, die finanziell tatsächlich ins Gewicht fallen.
+
+
+**Nächster Schritt:**
+Code und README aufräumen, unter anderem eine Beispielausgabe in die README aufnehmen, damit die Funktionen ohne Ausführen des Programms sichtbar sind.

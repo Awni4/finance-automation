@@ -7,6 +7,7 @@ Funktionsumfang:
 3. Ordnet jede Buchung automatisch einer Kategorie zu
 4. Gibt Auswertungen aus: Monatsübersicht, größte Ausgaben, Ausgaben nach Kategorie und nach Kategorie und Monat
 5. Erkennt Verdachtsfälle auf Doppelbuchungen (gleicher Text, Betrag und Monat)
+6. Erkennt ungewöhnlich hohe Ausgaben (mehr als das Dreifache des Medians ihrer Kategorie)
 
 Ausführen (im Projektordner):
     python src/main.py
@@ -73,6 +74,14 @@ def doppelbuchungen_finden(df: pd.DataFrame) -> pd.DataFrame:
     return df[doppelt]
 
 
+def ausreisser_finden(df: pd.DataFrame, faktor: float = 3) -> pd.DataFrame:
+    """Findet Ausgaben, die mehr als das faktor-fache des Medians ihrer Kategorie betragen."""
+    ausgaben = df[df["betrag"] < 0]
+    median = ausgaben.groupby("kategorie")["betrag"].transform("median")
+    auffaellig = ausgaben["betrag"] < faktor * median
+    return ausgaben[auffaellig]
+
+
 def main() -> None:
     df = kontoauszug_laden(DATEI)
     df["kategorie"] = df["text"].apply(kategorisieren)
@@ -96,6 +105,11 @@ def main() -> None:
     print("\n=== Verdacht auf Doppelbuchungen ===")
     doppelte = doppelbuchungen_finden(df)[["datum", "text", "betrag"]]
     print(doppelte.to_string(index=False))
+
+    print("\n=== Ungewöhnlich hohe Ausgaben ===")
+    ausreisser = ausreisser_finden(df)[["datum", "text", "betrag", "kategorie"]]
+    print(ausreisser.to_string(index=False))
+
 
 
 if __name__ == "__main__":
