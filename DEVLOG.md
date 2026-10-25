@@ -105,3 +105,27 @@ Zeilen filtern nach dem Muster `tabelle[bedingung]`; Standardwerte für Paramete
 
 **Nächster Schritt:**
 Code und README aufräumen, unter anderem eine Beispielausgabe in die README aufnehmen, damit die Funktionen ohne Ausführen des Programms sichtbar sind.
+
+## Tag 6 – 25.10.2026
+**Erledigt:**
+Kategorie-Auswertungen auf Ausgaben beschränkt: Das Einkommen erscheint nicht mehr in „Ausgaben nach Kategorie“ und „Ausgaben nach Kategorie und Monat“ -> Überschrift und Inhalt stimmen überein, Monatsübersicht mit Einnahmen und Saldo bleibt unverändert
+
+Neue Funktion `nur_ausgaben` als zentrale Filterregel, die sowohl in `main` als auch in `ausreisser_finden` verwendet wird.
+
+**Gelernt:**
+DRY bezieht sich auf die Definition einer Regel, nicht auf die Anzahl ihrer Aufrufe: Die Regel „Ausgabe = negativer Betrag“ ist einmal definiert und wird an mehreren Stellen genutzt; die Position eines Filters entscheidet über das Ergebnis.
+
+Funktionen sollten sich nicht darauf verlassen, bereits korrekt gefilterte Daten zu erhalten, sondern selbst sicherstellen, dass sie mit den richtigen Daten arbeiten.
+
+**Problem & Lösung:**
+- Problem: Die Auswertungen mit der Überschrift „Ausgaben“ enthielten auch das Einkommen (+1.150 € pro Monat) und waren dadurch irreführend
+- Lösung: Abwägung zwischen Umbenennen der Überschriften und Herausfiltern des Einkommens, Entscheidung für den Filter, da bei der Analyse die Ausgaben im Fokus stehen.
+
+
+-> Den Filter global in `kontoauszug_laden` zu setzen hätte die Monatsübersicht verfälscht (Einnahmen 0 €, falscher Saldo).
+
+-> Den Filter nur einmal in `main` anzuwenden hätte `ausreisser_finden` abhängig von vorgefilterten Daten gemacht: Bei einem Aufruf mit allen Buchungen wäre das Gehalt als ungewöhnlich hohe Ausgabe markiert worden.
+
+
+**Nächster Schritt:**
+Beispielausgabe in die README aufnehmen, damit die Funktionen ohne Ausführen des Programms sichtbar sind.

@@ -5,7 +5,7 @@ Funktionsumfang:
 1. Liest einen Kontoauszug im deutschen CSV-Format ein (Semikolon, Komma als Dezimaltrennzeichen)
 2. Wandelt Datum und Beträge in echte Datentypen um
 3. Ordnet jede Buchung automatisch einer Kategorie zu
-4. Gibt Auswertungen aus: Monatsübersicht, größte Ausgaben, Ausgaben nach Kategorie und nach Kategorie und Monat
+4. Gibt Auswertungen aus: Monatsübersicht, größte Ausgaben, Ausgaben nach Kategorie und nach Kategorie und Monat (ohne Einnahmen)
 5. Erkennt Verdachtsfälle auf Doppelbuchungen (gleicher Text, Betrag und Monat)
 6. Erkennt ungewöhnlich hohe Ausgaben (mehr als das Dreifache des Medians ihrer Kategorie)
 
@@ -39,9 +39,14 @@ def kontoauszug_laden(pfad: Path) -> pd.DataFrame:
     })
     # Text "01.07.2026" in ein echtes Datum umwandeln
     df["datum"] = pd.to_datetime(df["datum"], format="%d.%m.%Y")
-     # Monat als eigene Spalte, wird von mehreren Auswertungen genutzt
+    # Monat als eigene Spalte, wird von mehreren Auswertungen genutzt
     df["monat"] = df["datum"].dt.to_period("M")
     return df
+
+
+def nur_ausgaben(df: pd.DataFrame) -> pd.DataFrame:
+    """Gibt nur die Ausgaben (negative Beträge) zurück."""
+    return df[df["betrag"] < 0]
 
 
 def monatsuebersicht(df: pd.DataFrame) -> pd.DataFrame:
@@ -76,7 +81,7 @@ def doppelbuchungen_finden(df: pd.DataFrame) -> pd.DataFrame:
 
 def ausreisser_finden(df: pd.DataFrame, faktor: float = 3) -> pd.DataFrame:
     """Findet Ausgaben, die mehr als das faktor-fache des Medians ihrer Kategorie betragen."""
-    ausgaben = df[df["betrag"] < 0]
+    ausgaben = nur_ausgaben(df)
     median = ausgaben.groupby("kategorie")["betrag"].transform("median")
     auffaellig = ausgaben["betrag"] < faktor * median
     return ausgaben[auffaellig]
@@ -85,6 +90,7 @@ def ausreisser_finden(df: pd.DataFrame, faktor: float = 3) -> pd.DataFrame:
 def main() -> None:
     df = kontoauszug_laden(DATEI)
     df["kategorie"] = df["text"].apply(kategorisieren)
+    ausgaben = nur_ausgaben(df)
 
     print(f"{len(df)} Buchungen eingelesen "
           f"({df['datum'].min():%d.%m.%Y} bis {df['datum'].max():%d.%m.%Y})\n")
@@ -97,10 +103,10 @@ def main() -> None:
     print(top.to_string(index=False))
 
     print("\n=== Ausgaben nach Kategorie ===")
-    print(df.groupby("kategorie")["betrag"].sum().round(2).sort_values().to_string())
+    print(ausgaben.groupby("kategorie")["betrag"].sum().round(2).sort_values().to_string())
 
     print("\n=== Ausgaben nach Kategorie und Monat ===")
-    print(kategorien_pro_monat(df).to_string())
+    print(kategorien_pro_monat(ausgaben).to_string())
 
     print("\n=== Verdacht auf Doppelbuchungen ===")
     doppelte = doppelbuchungen_finden(df)[["datum", "text", "betrag"]]
@@ -109,7 +115,6 @@ def main() -> None:
     print("\n=== Ungewöhnlich hohe Ausgaben ===")
     ausreisser = ausreisser_finden(df)[["datum", "text", "betrag", "kategorie"]]
     print(ausreisser.to_string(index=False))
-
 
 
 if __name__ == "__main__":
