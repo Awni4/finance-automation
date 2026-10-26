@@ -25,7 +25,7 @@ Dieses Projekt automatisiert den Ablauf von der CSV-Datei bis zum fertigen Beric
 - [x] Auswertung nach Kategorie und Monat (Pivot-Tabelle)
 - [x] Erkennung von Doppelbuchungen
 - [x] Erkennung ungewöhnlich hoher Ausgaben
-- [ ] Diagramme
+- [x] Diagramme
 - [ ] Export als Excel-Bericht
 - [ ] Prozessmodell (BPMN) Vorher/Nachher
 
@@ -61,7 +61,7 @@ Auf einen Blick wird sichtbar, in welchem Monat welche Kategorie vom Normalwert 
 
 ## Technologien
 
-Python · pandas · (geplant: matplotlib, openpyxl, BPMN)
+Technologien: Python · pandas · matplotlib · (geplant: openpyxl, BPMN)
 
 ## Installation & Nutzung
 

@@ -129,3 +129,30 @@ Funktionen sollten sich nicht darauf verlassen, bereits korrekt gefilterte Daten
 
 **Nächster Schritt:**
 Beispielausgabe in die README aufnehmen, damit die Funktionen ohne Ausführen des Programms sichtbar sind.
+
+## Tag 7 – 26.10.2026
+**Erledigt:**
+Beispielausgabe in die README aufgenommen (Pivot-Tabelle, Doppelbuchungen, ungewöhnlich hohe Ausgaben) -> Funktionen des Programms sind ohne Ausführen direkt auf der Projektseite sichtbar
+
+Neue Datei `diagramme.py` mit zwei Balkendiagrammen: Ausgaben nach Kategorie (waagerecht, Beträge mit `.abs()` als positive Werte dargestellt) und Saldo pro Monat (senkrecht, mit Nulllinie) -> Diagramme werden beim Ausführen automatisch im Ordner `output` gespeichert
+
+matplotlib als neue Abhängigkeit in `requirements.txt` ergänzt.
+
+**Gelernt:**
+Grundaufbau eines Diagramms mit matplotlib: `fig, ax = plt.subplots()`, waagerechte (`barh`) und senkrechte Balken (`bar`), Titel und Achsenbeschriftung, Speichern mit `savefig` und Schließen mit `plt.close`; Monate (Datentyp Period) mit `.astype(str)` in Text umwandeln, damit sie als Achsenbeschriftung verwendet werden können.
+
+Diagrammlogik nach dem Prinzip der Trennung der Zuständigkeiten in eine eigene Datei ausgelagert; Rückgabewerte von Funktionen nutzen (gespeicherter Dateipfad wird zurückgegeben und ausgegeben).
+
+**Problem & Lösung:**
+- Problem: Ausgaben liegen als negative Beträge vor, im Balkendiagramm würden die Balken dadurch nach links zeigen und wären schwer lesbar
+- Lösung: Beträge im Kategorie-Diagramm mit `.abs()` in positive Werte umgewandelt. Im Saldo-Diagramm bleiben negative Werte bewusst erhalten, da dort gerade sichtbar sein soll, ob ein Monat im Plus oder Minus endet (ergänzt durch eine Nulllinie).
+
+- Problem: Die Diagramm-Funktion für Ausgaben verlässt sich darauf, bereits gefilterte Daten zu erhalten, da `nur_ausgaben` in `main.py` liegt und von `diagramme.py` nicht sauber importiert werden kann
+- Lösung: Vorerst wird `ausgaben` aus `main` übergeben. Für die abschließende Überarbeitung vorgemerkt: gemeinsam genutzte Hilfsfunktionen in eine eigene Datei auslagern.
+
+
+-> Die Diagramme machen auf einen Blick sichtbar, was in den Tabellen erst gesucht werden muss: Wohnen ist der größte Ausgabenposten, und das Minus im August (−664,38 €) sticht im Saldo-Diagramm deutlich hervor.
+
+
+**Nächster Schritt:**
+Auswertung als Excel-Bericht mit mehreren Tabellenblättern exportieren, damit die Ergebnisse auch ohne Python weiterverwendet werden können.

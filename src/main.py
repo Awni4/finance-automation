@@ -18,6 +18,7 @@ from pathlib import Path
 import pandas as pd
 
 from kategorien import kategorisieren
+from diagramme import diagramm_ausgaben_nach_kategorie, diagramm_saldo_pro_monat
 
 # Pfad zur Datei – relativ zum Projektordner, damit es auf jedem Rechner funktioniert
 DATEI = Path(__file__).parent.parent / "data" / "kontoauszug_beispiel.csv"
@@ -115,6 +116,12 @@ def main() -> None:
     print("\n=== Ungewöhnlich hohe Ausgaben ===")
     ausreisser = ausreisser_finden(df)[["datum", "text", "betrag", "kategorie"]]
     print(ausreisser.to_string(index=False))
+
+    pfad = diagramm_ausgaben_nach_kategorie(ausgaben)
+    print(f"\nDiagramm gespeichert: {pfad}")
+
+    pfad = diagramm_saldo_pro_monat(monatsuebersicht(df))
+    print(f"Diagramm gespeichert: {pfad}")
 
 
 if __name__ == "__main__":
