@@ -8,6 +8,7 @@ Funktionsumfang:
 4. Gibt Auswertungen aus: Monatsübersicht, größte Ausgaben, Ausgaben nach Kategorie und nach Kategorie und Monat (ohne Einnahmen)
 5. Erkennt Verdachtsfälle auf Doppelbuchungen (gleicher Text, Betrag und Monat)
 6. Erkennt ungewöhnlich hohe Ausgaben (mehr als das Dreifache des Medians ihrer Kategorie)
+7. Erstellt Diagramme (PNG) und einen Excel-Bericht mit allen Auswertungen im Ordner output
 
 Ausführen (im Projektordner):
     python src/main.py
@@ -19,6 +20,7 @@ import pandas as pd
 
 from kategorien import kategorisieren
 from diagramme import diagramm_ausgaben_nach_kategorie, diagramm_saldo_pro_monat
+from bericht import excel_bericht_erstellen
 
 # Pfad zur Datei – relativ zum Projektordner, damit es auf jedem Rechner funktioniert
 DATEI = Path(__file__).parent.parent / "data" / "kontoauszug_beispiel.csv"
@@ -122,6 +124,16 @@ def main() -> None:
 
     pfad = diagramm_saldo_pro_monat(monatsuebersicht(df))
     print(f"Diagramm gespeichert: {pfad}")
+
+    blaetter = {
+        "Buchungen": df,
+        "Monatsübersicht": monatsuebersicht(df).reset_index(),
+        "Ausgaben pro Monat": kategorien_pro_monat(ausgaben).reset_index(),
+        "Doppelbuchungen": doppelbuchungen_finden(df),
+        "Ungewöhnlich hohe Ausgaben": ausreisser_finden(df),
+    }
+    pfad = excel_bericht_erstellen(blaetter)
+    print(f"Excel-Bericht gespeichert: {pfad}")
 
 
 if __name__ == "__main__":

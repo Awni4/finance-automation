@@ -156,3 +156,27 @@ Diagrammlogik nach dem Prinzip der Trennung der Zuständigkeiten in eine eigene 
 
 **Nächster Schritt:**
 Auswertung als Excel-Bericht mit mehreren Tabellenblättern exportieren, damit die Ergebnisse auch ohne Python weiterverwendet werden können.
+
+## Tag 8 – 27.10.2026
+**Erledigt:**
+Neue Datei `bericht.py`: Alle Auswertungen werden als Excel-Bericht mit fünf Tabellenblättern exportiert (Buchungen, Monatsübersicht, Ausgaben pro Monat, Doppelbuchungen, ungewöhnlich hohe Ausgaben) -> Ergebnisse können ohne Python in Excel weiterverwendet werden
+
+Zellen werden automatisch formatiert: Datum im deutschen Format, Beträge mit zwei Nachkommastellen, Spaltenbreite passend zum Inhalt.
+
+**Gelernt:**
+Mehrere Tabellen mit `pd.ExcelWriter` in eine Datei schreiben; `with`-Block schließt die Datei automatisch; Dictionary als flexible Übergabe (Blattname → Tabelle), sodass `bericht.py` unabhängig vom Inhalt der Tabellen bleibt; `.reset_index()` macht Index-Beschriftungen (Monat, Kategorie) zu normalen Spalten.
+
+Zellen mit openpyxl nachträglich formatieren; Formatierung anhand des Datentyps (`isinstance`) statt anhand fester Spalten, damit eine Funktion für alle Tabellenblätter funktioniert (Beträge als `float` erhalten zwei Nachkommastellen, Anzahlen als `int` bleiben ganze Zahlen).
+
+**Problem & Lösung:**
+- Problem: Datumswerte wurden trotz `datetime_format="DD.MM.YYYY"` als `2026-07-01 00:00:00` angezeigt, da diese Einstellung mit der Excel-Engine openpyxl nicht greift
+- Lösung: Engine ausdrücklich festgelegt (`engine="openpyxl"`) und Datumszellen nach dem Schreiben selbst formatiert.
+
+
+-> Das Verhalten hing von der installierten Bibliothek ab: In einer anderen Umgebung wurde das Datum korrekt formatiert. Ergebnisse müssen daher in der tatsächlichen Zielumgebung geprüft werden; eine ausdrücklich festgelegte Engine sorgt für gleiches Verhalten auf jedem Rechner.
+
+-> `bericht.py` benötigt keine Kenntnis darüber, welche Daten übergeben werden – das Problem aus Tag 7 (Abhängigkeit von vorgefilterten Daten) tritt hier durch die Trennung von Berechnung und Export nicht auf.
+
+
+**Nächster Schritt:**
+Diagramme in die README einbinden, damit die Ergebnisse direkt auf der Projektseite sichtbar sind.

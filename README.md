@@ -15,7 +15,7 @@ Dieses Projekt automatisiert den Ablauf von der CSV-Datei bis zum fertigen Beric
 1. **Einlesen** – deutsches Bank-CSV-Format (Semikolon, Dezimalkomma)
 2. **Kategorisieren** – regelbasiert (z. B. „REWE“ → Lebensmittel), später mit KI
 3. **Prüfen** – Doppelbuchungen und ungewöhnlich hohe Ausgaben markieren
-4. **Berichten** – Monatsübersicht mit Diagrammen als Excel/HTML
+4. Monatsübersicht mit Diagrammen als Excel/HTML → Diagramme und Excel-Bericht mit allen Auswertungen
 
 ## Funktionen
 
@@ -26,7 +26,7 @@ Dieses Projekt automatisiert den Ablauf von der CSV-Datei bis zum fertigen Beric
 - [x] Erkennung von Doppelbuchungen
 - [x] Erkennung ungewöhnlich hoher Ausgaben
 - [x] Diagramme
-- [ ] Export als Excel-Bericht
+- [x] Export als Excel-Bericht
 - [ ] Prozessmodell (BPMN) Vorher/Nachher
 
 ## Beispielausgabe
@@ -61,7 +61,7 @@ Auf einen Blick wird sichtbar, in welchem Monat welche Kategorie vom Normalwert 
 
 ## Technologien
 
-Technologien: Python · pandas · matplotlib · (geplant: openpyxl, BPMN)
+Python · pandas · matplotlib · openpyxl · (geplant: BPMN)
 
 ## Installation & Nutzung
 
