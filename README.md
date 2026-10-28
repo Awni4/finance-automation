@@ -1,8 +1,8 @@
 # Finance Automation
 
-Automatisierte Auswertung von Kontoauszügen mit Python: Buchungen einlesen, automatisch kategorisieren, Auffälligkeiten erkennen und einen Monatsbericht erzeugen.
+Automatisierte Auswertung von Kontoauszügen mit Python: Buchungen einlesen, automatisch kategorisieren, Auffälligkeiten erkennen sowie Diagramme und einen Excel-Bericht erzeugen.
 
->**Status:** in Entwicklung – Fortschritt wird regelmäßig im [Entwicklungstagebuch](DEVLOG.md) dokumentiert.
+> **Status:** abgeschlossen – Entwicklungsverlauf im [Entwicklungstagebuch](DEVLOG.md)
 
 ## Problem
 
@@ -13,9 +13,9 @@ Viele Finanzprozesse laufen noch manuell: Kontoauszüge werden in Excel kopiert,
 Dieses Projekt automatisiert den Ablauf von der CSV-Datei bis zum fertigen Bericht:
 
 1. **Einlesen** – deutsches Bank-CSV-Format (Semikolon, Dezimalkomma)
-2. **Kategorisieren** – regelbasiert (z. B. „REWE“ → Lebensmittel), später mit KI
+2. **Kategorisieren** – regelbasiert (z. B. „REWE“ → Lebensmittel)
 3. **Prüfen** – Doppelbuchungen und ungewöhnlich hohe Ausgaben markieren
-4. Monatsübersicht mit Diagrammen als Excel/HTML → Diagramme und Excel-Bericht mit allen Auswertungen
+4. **Berichten** – Diagramme und Excel-Bericht mit allen Auswertungen
 
 ## Funktionen
 
@@ -27,7 +27,7 @@ Dieses Projekt automatisiert den Ablauf von der CSV-Datei bis zum fertigen Beric
 - [x] Erkennung ungewöhnlich hoher Ausgaben
 - [x] Diagramme
 - [x] Export als Excel-Bericht
-- [ ] Prozessmodell (BPMN) Vorher/Nachher
+- [x] Prozessmodell (BPMN) Vorher/Nachher
 
 ## Beispielausgabe
 
@@ -59,9 +59,33 @@ Wohnen           -520.00  -520.00  -520.00
 
 Auf einen Blick wird sichtbar, in welchem Monat welche Kategorie vom Normalwert abweicht. Auffälligkeiten wie die doppelte Spotify-Abbuchung im September und der ungewöhnlich hohe Amazon-Einkauf über 649 € im August werden automatisch erkannt, ohne dass die Buchungen manuell durchgesehen werden müssen.
 
+### Diagramme
+
+![Ausgaben nach Kategorie](docs/ausgaben_nach_kategorie.png)
+
+![Saldo pro Monat](docs/saldo_pro_monat.png)
+
+## Prozessmodell (BPMN)
+
+**Vorher – manueller Ablauf:**
+
+![Prozess vorher](docs/prozess_vorher.svg)
+
+**Nachher – automatisierter Ablauf:**
+
+![Prozess nachher](docs/prozess_nachher.svg)
+
+Fünf manuelle Arbeitsschritte (Kopieren, Kategorisieren, Summieren, Auffälligkeiten suchen, Bericht erstellen) werden durch einen automatisierten Schritt ersetzt. Manuell bleiben nur der Download des Kontoauszugs und die Prüfung der markierten Verdachtsfälle.
+
 ## Technologien
 
-Python · pandas · matplotlib · openpyxl · (geplant: BPMN)
+Python · pandas · matplotlib · openpyxl · BPMN
+
+## Mögliche Erweiterungen
+
+- **KI-gestützte Kategorisierung** für Händler wie Amazon, bei denen der Händlername nichts über die gekaufte Ware aussagt
+- **Wesentlichkeitsgrenze** relativ zum Einkommen, damit nur finanziell relevante Ausreißer markiert werden
+- **Automatisierte Tests** für Kategorisierung und Prüfregeln
 
 ## Installation & Nutzung
 
@@ -71,6 +95,8 @@ cd finance-automation
 pip install -r requirements.txt
 python src/main.py
 ```
+
+Die Auswertung wird im Terminal ausgegeben; Diagramme und Excel-Bericht werden im Ordner `output/` gespeichert.
 
 ## Daten
 

@@ -24,6 +24,7 @@ def diagramm_ausgaben_nach_kategorie(ausgaben: pd.DataFrame) -> Path:
     plt.close(fig)
     return pfad
 
+
 def diagramm_saldo_pro_monat(uebersicht: pd.DataFrame) -> Path:
     """Speichert ein Balkendiagramm des Saldos pro Monat und gibt den Dateipfad zurück."""
     fig, ax = plt.subplots(figsize=(8, 5))

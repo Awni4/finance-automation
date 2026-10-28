@@ -180,3 +180,31 @@ Zellen mit openpyxl nachträglich formatieren; Formatierung anhand des Datentyps
 
 **Nächster Schritt:**
 Diagramme in die README einbinden, damit die Ergebnisse direkt auf der Projektseite sichtbar sind.
+
+## Tag 9 – 28.10.2026
+**Erledigt:**
+Prozessmodelle in BPMN erstellt (Vorher: manueller Ablauf, Nachher: automatisierter Ablauf) und zusammen mit den Diagrammen in die README eingebunden -> Nutzen der Automatisierung direkt auf der Projektseite sichtbar
+
+README abschließend überarbeitet: Status auf abgeschlossen gesetzt, mögliche Erweiterungen ergänzt.
+
+**Gelernt:**
+BPMN in der Praxis: Unterscheidung zwischen User Task (Mensch) und Service Task (System), Gateways als Frage beschriften, jeder Prozess benötigt ein Endereignis; automatisch erzeugte Dateien (`output`, nicht versioniert) von Dokumentationsdateien (`docs`, versioniert) trennen.
+
+**Problem & Lösung:**
+- Problem: Die Diagramme werden im Ordner `output` gespeichert, der per `.gitignore` nicht hochgeladen wird, und konnten daher nicht in der README angezeigt werden
+- Lösung: Bilder für die Dokumentation in einem eigenen Ordner `docs` abgelegt; `output` bleibt für bei jedem Lauf neu erzeugte Dateien.
+
+
+-> Prozessvergleich: Fünf manuelle Arbeitsschritte (Kopieren, Kategorisieren, Summieren, Auffälligkeiten suchen, Bericht erstellen) werden durch einen automatisierten Schritt ersetzt. Manuell bleiben nur der Download des Kontoauszugs und die Prüfung der markierten Verdachtsfälle.
+
+
+## Fazit
+In neun Arbeitstagen entstand aus einem einfachen CSV-Import eine automatisierte Auswertung mit Kategorisierung, zwei Prüfregeln, Diagrammen, Excel-Bericht und Prozessmodell.
+
+-> Prüfregeln müssen präzise definiert sein: Eine fehlende Spalte im Vergleich führte bei den Doppelbuchungen zu 38 statt 2 Treffern.
+
+-> Robuste Kennzahlen sind entscheidend: Der Median erkennt Ausreißer zuverlässig, wo Mittelwert und Standardabweichung durch den Ausreißer selbst verzerrt werden.
+
+-> Saubere Struktur zahlt sich aus: DRY und die Trennung von Zuständigkeiten (Kategorien, Diagramme, Bericht in eigenen Dateien) machen Änderungen sicherer.
+
+-> Bekannte Einschränkungen: Der Zeitraum in den Diagrammtiteln ist fest hinterlegt, und die Diagramm-Funktion erwartet bereits gefilterte Ausgaben.
